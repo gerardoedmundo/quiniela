@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiniela de Fútbol de LOS ANEXADOS DEL CBT2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #b71c1c, #e53935);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .match {
+      background: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border-left: 5px solid #e53935;
+    }
+
+    .teams {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #e53935;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c62828;
+    }
+
+    .result {
+      margin-top: 20px;
+      background: #fff3f3;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #ffcdd2;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Quiniela de Fútbol de LOS ANEXADOS DEL CBT2 (Partidos de IDA)</h1>
+
+<div class="container" id="app"></div>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+const partidos = [
+  ["América", "Pumas"],
+  ["Tigres", "Guadalajara"],
+  ["Atlas", "Cruz Azul"],
+  ["Toluca", "Pachuca"]
+];
+
+let datosGuardados = null;
+
+const app = document.getElementById("app");
+
+function render() {
+  app.innerHTML = "";
+
+  const inputNombre = document.createElement("input");
+  inputNombre.type = "text";
+  inputNombre.id = "nombre";
+  inputNombre.placeholder = "Ingresa tu nombre";
+  app.appendChild(inputNombre);
+
+  partidos.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "match";
+
+    div.innerHTML = `
+      <div class="teams">${p[0]} vs ${p[1]}</div>
+      <label><input type="radio" name="match${i}" value="A"> ${p[0]}</label>
+      <label><input type="radio" name="match${i}" value="E"> Empate</label>
+      <label><input type="radio" name="match${i}" value="B"> ${p[1]}</label>
+    `;
+
+    app.appendChild(div);
+  });
+
+  const btnEnviar = document.createElement("button");
+  btnEnviar.textContent = "Guardar Quiniela";
+  btnEnviar.onclick = enviar;
+  app.appendChild(btnEnviar);
+
+  const btnPDF = document.createElement("button");
+  btnPDF.textContent = "Descargar PDF";
+  btnPDF.onclick = descargarPDF;
+  app.appendChild(btnPDF);
+
+  const btnWhats = document.createElement("button");
+  btnWhats.textContent = "Enviar por WhatsApp";
+  btnWhats.onclick = enviarWhatsApp;
+  app.appendChild(btnWhats);
+
+  const resultado = document.createElement("div");
+  resultado.id = "resultado";
+  resultado.className = "result";
+  app.appendChild(resultado);
+}
+
+function enviar() {
+  const nombre = document.getElementById("nombre").value.trim();
+
+  if (!nombre) {
+    alert("Ingresa tu nombre");
+    return;
+  }
+
+  let selecciones = [];
+
+  for (let i = 0; i < partidos.length; i++) {
+    const seleccion = document.querySelector(`input[name="match${i}"]:checked`);
+    if (!seleccion) {
+      alert("Completa todos los partidos");
+      return;
+    }
+    selecciones.push(seleccion.value);
+  }
+
+  datosGuardados = { nombre, selecciones };
+
+  mostrarResultado(nombre, selecciones);
+}
+
+function mostrarResultado(nombre, selecciones) {
+  const resultadoDiv = document.getElementById("resultado");
+
+  let html = `<h3>Jugador: ${nombre}</h3><ul>`;
+
+  selecciones.forEach((sel, i) => {
+    let texto = sel === "A" ? partidos[i][0] :
+                sel === "B" ? partidos[i][1] : "Empate";
+
+    html += `<li>${partidos[i][0]} vs ${partidos[i][1]} → <b>${texto}</b></li>`;
+  });
+
+  html += "</ul>";
+  resultadoDiv.innerHTML = html;
+}
+
+function descargarPDF() {
+  if (!datosGuardados) {
+    alert("Primero guarda la quiniela");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  // 🎨 ENCABEZADO
+  doc.setFillColor(183, 28, 28);
+  doc.rect(0, 0, 210, 35, "F");
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(20);
+  doc.text("QUINIELA DE FÚTBOL DE LOS ANEXADOS DEL CBT2 (PARTIDOS DE IDA)", 105, 18, null, null, "center");
+
+  doc.setFontSize(12);
+  doc.text("Formato oficial", 105, 26, null, null, "center");
+
+  // 👤 DATOS
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(12);
+
+  doc.text(`Jugador: ${datosGuardados.nombre}`, 20, 50);
+  doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 140, 50);
+
+  // 📋 TABLA
+  let y = 65;
+
+  datosGuardados.selecciones.forEach((sel, i) => {
+    let texto = sel === "A" ? partidos[i][0] :
+                sel === "B" ? partidos[i][1] : "Empate";
+
+    // Caja
+    doc.setDrawColor(220);
+    doc.roundedRect(15, y - 8, 180, 12, 3, 3);
+
+    // Texto
+    doc.setFontSize(11);
+    doc.text(`${i + 1}. ${partidos[i][0]} vs ${partidos[i][1]}`, 20, y - 2);
+
+    doc.setFontSize(12);
+    doc.setTextColor(183, 28, 28);
+    doc.text(`Resultado: ${texto}`, 140, y - 2);
+
+    doc.setTextColor(0, 0, 0);
+
+    y += 18;
+  });
+
+  // 🧾 PIE
+  doc.setDrawColor(200);
+  doc.line(20, 270, 190, 270);
+
+  doc.setFontSize(10);
+  doc.text("Gracias por participar", 105, 278, null, null, "center");
+
+  doc.save(`quiniela_${datosGuardados.nombre}.pdf`);
+}
+
+function enviarWhatsApp() {
+  if (!datosGuardados) {
+    alert("Primero guarda la quiniela");
+    return;
+  }
+
+  let mensaje = `Quiniela de Fútbol\n`;
+  mensaje += `Jugador: ${datosGuardados.nombre}\n\n`;
+
+  datosGuardados.selecciones.forEach((sel, i) => {
+    let texto = sel === "A" ? partidos[i][0] :
+                sel === "B" ? partidos[i][1] : "Empate";
+
+    mensaje += `${partidos[i][0]} vs ${partidos[i][1]} → ${texto}\n`;
+  });
+
+  const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+
+  window.open(url, "_blank");
+}
+
+render();
+</script>
+
+</body>
+</html>
