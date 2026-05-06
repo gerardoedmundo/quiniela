@@ -14,19 +14,20 @@
       background: linear-gradient(135deg, #0d47a1, #1976d2);
       color: #333;
       margin: 0;
-      padding: 20px;
+      padding: 10px;
     }
 
     h1 {
       text-align: center;
       color: white;
+      font-size: 20px;
     }
 
     .container {
       max-width: 800px;
       margin: auto;
       background: #ffffff;
-      padding: 20px;
+      padding: 15px;
       border-radius: 12px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
@@ -36,6 +37,7 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 16px;
+      box-sizing: border-box;
     }
 
     input[type="text"] {
@@ -45,7 +47,7 @@
 
     .match {
       background: #f5f8ff;
-      padding: 15px;
+      padding: 12px;
       margin-bottom: 10px;
       border-radius: 10px;
       border-left: 5px solid #1976d2;
@@ -54,17 +56,25 @@
     .teams {
       font-weight: bold;
       margin-bottom: 10px;
+      text-align: center;
     }
 
     .score {
       display: flex;
-      gap: 10px;
+      justify-content: center;
       align-items: center;
+      gap: 8px;
+    }
+
+    .score input {
+      width: 60px;
+      text-align: center;
+      font-size: 18px;
     }
 
     button {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       margin-top: 10px;
       border: none;
       border-radius: 8px;
@@ -85,6 +95,38 @@
       border-radius: 10px;
       border: 1px solid #c5d6ff;
     }
+
+    /* 📱 CELULAR */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 18px;
+      }
+
+      .container {
+        padding: 10px;
+      }
+
+      .score input {
+        width: 50px;
+        font-size: 16px;
+      }
+
+      .teams {
+        font-size: 14px;
+      }
+
+      button {
+        font-size: 15px;
+        padding: 12px;
+      }
+    }
+
+    /* 📲 TABLET */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .score input {
+        width: 55px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -96,7 +138,7 @@
 <script>
 const { jsPDF } = window.jspdf;
 
-// 🔁 EQUIPOS INVERTIDOS
+// 🔁 Equipos invertidos
 const partidos = [
   ["Pumas", "América"],
   ["Guadalajara", "Tigres"],
@@ -105,7 +147,6 @@ const partidos = [
 ];
 
 let datosGuardados = null;
-
 const app = document.getElementById("app");
 
 function render() {
@@ -124,9 +165,9 @@ function render() {
     div.innerHTML = `
       <div class="teams">${p[0]} vs ${p[1]}</div>
       <div class="score">
-        <input type="number" min="0" id="golA${i}" placeholder="${p[0]}" />
-        <span> - </span>
-        <input type="number" min="0" id="golB${i}" placeholder="${p[1]}" />
+        <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" id="golA${i}" placeholder="${p[0]}">
+        <span>-</span>
+        <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" id="golB${i}" placeholder="${p[1]}">
       </div>
     `;
 
@@ -177,7 +218,6 @@ function enviar() {
   }
 
   datosGuardados = { nombre, resultados };
-
   mostrarResultado();
 }
 
@@ -202,7 +242,6 @@ function descargarPDF() {
 
   const doc = new jsPDF();
 
-  // 🎨 ENCABEZADO AZUL
   doc.setFillColor(13, 71, 161);
   doc.rect(0, 0, 210, 35, "F");
 
@@ -214,7 +253,6 @@ function descargarPDF() {
   doc.text("Marcadores", 105, 26, null, null, "center");
 
   doc.setTextColor(0, 0, 0);
-
   doc.text(`Jugador: ${datosGuardados.nombre}`, 20, 50);
 
   let y = 65;
