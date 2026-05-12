@@ -1,288 +1,372 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Quiniela de Fútbol PARTIDO DE VUELTA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- jsPDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<title>Quiniela Liga MX</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0d47a1, #1976d2);
-      color: #333;
-      margin: 0;
-      padding: 10px;
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#071326,#0d2340,#133b68);
+    min-height:100vh;
+    color:white;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.title h1{
+    font-size:2.3rem;
+    margin-bottom:10px;
+}
+
+.title p{
+    opacity:0.8;
+}
+
+.card{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:22px;
+    padding:20px;
+    margin-bottom:25px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.match-title{
+    text-align:center;
+    font-size:1.4rem;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.teams{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.team{
+    flex:1;
+    min-width:120px;
+    text-align:center;
+}
+
+.team-name{
+    margin-bottom:10px;
+    font-size:1.1rem;
+    font-weight:bold;
+}
+
+select{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    font-size:1rem;
+    font-weight:bold;
+    text-align:center;
+    color:#0d2340;
+}
+
+.vs{
+    font-size:1.6rem;
+    font-weight:bold;
+}
+
+.extra{
+    margin-top:10px;
+}
+
+.extra label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    font-size:1rem;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    border-radius:15px;
+    font-size:1rem;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn-save{
+    background:#00c853;
+    color:white;
+}
+
+.btn-save:hover{
+    background:#00e676;
+}
+
+.btn-whatsapp{
+    background:#25D366;
+    color:white;
+    display:none;
+}
+
+.btn-whatsapp:hover{
+    background:#2df07a;
+}
+
+.resultado{
+    display:none;
+    margin-top:20px;
+    background:rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:20px;
+}
+
+.resultado h2{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.resultado p{
+    margin:10px 0;
+}
+
+@media(max-width:700px){
+
+    .teams{
+        flex-direction:column;
     }
 
-    h1 {
-      text-align: center;
-      color: white;
-      font-size: 20px;
+    .vs{
+        margin:10px 0;
     }
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #ffffff;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    .title h1{
+        font-size:1.8rem;
     }
 
-    input[type="text"], input[type="number"] {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
+}
 
-    input[type="text"] {
-      width: 100%;
-      margin-bottom: 15px;
-    }
-
-    .match {
-      background: #f5f8ff;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      border-left: 5px solid #1976d2;
-    }
-
-    .teams {
-      font-weight: bold;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .score {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .score input {
-      width: 60px;
-      text-align: center;
-      font-size: 18px;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #1976d2;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0d47a1;
-    }
-
-    .result {
-      margin-top: 20px;
-      background: #eef4ff;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #c5d6ff;
-    }
-
-    /* 📱 CELULAR */
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 18px;
-      }
-
-      .container {
-        padding: 10px;
-      }
-
-      .score input {
-        width: 50px;
-        font-size: 16px;
-      }
-
-      .teams {
-        font-size: 14px;
-      }
-
-      button {
-        font-size: 15px;
-        padding: 12px;
-      }
-    }
-
-    /* 📲 TABLET */
-    @media (min-width: 481px) and (max-width: 768px) {
-      .score input {
-        width: 55px;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
-<h1>Quiniela de Fútbol CBT2 (Marcadores)</h1>
+<div class="container">
 
-<div class="container" id="app"></div>
+    <div class="title">
+        <h1>⚽ Quiniela Liga MX</h1>
+        <p>Semifinales - Marcador Global</p>
+    </div>
+
+    <!-- PARTIDO 1 -->
+    <div class="card">
+
+        <div class="match-title">
+            Pumas vs Pachuca
+        </div>
+
+        <div class="teams">
+
+            <div class="team">
+                <div class="team-name">Pumas</div>
+
+                <select id="pumas">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+
+            <div class="vs">VS</div>
+
+            <div class="team">
+                <div class="team-name">Pachuca</div>
+
+                <select id="pachuca">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PARTIDO 2 -->
+    <div class="card">
+
+        <div class="match-title">
+            Guadalajara vs Cruz Azul
+        </div>
+
+        <div class="teams">
+
+            <div class="team">
+                <div class="team-name">Guadalajara</div>
+
+                <select id="gdl">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+
+            <div class="vs">VS</div>
+
+            <div class="team">
+                <div class="team-name">Cruz Azul</div>
+
+                <select id="cruzazul">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- NOMBRE -->
+    <div class="card">
+
+        <div class="extra">
+            <label>Nombre del participante</label>
+            <input type="text" id="nombre" placeholder="Escribe tu nombre">
+        </div>
+
+        <button class="btn-save" onclick="guardarQuiniela()">
+            Guardar Quiniela
+        </button>
+
+        <button class="btn-whatsapp" id="btnWhatsapp" onclick="enviarWhatsApp()">
+            Enviar por WhatsApp
+        </button>
+
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="resultado" id="resultado">
+
+        <h2>✅ Quiniela Guardada</h2>
+
+        <p id="resNombre"></p>
+        <p id="res1"></p>
+        <p id="res2"></p>
+
+    </div>
+
+</div>
 
 <script>
-const { jsPDF } = window.jspdf;
 
-// 🔁 Equipos invertidos
-const partidos = [
-  ["Pumas", "América"],
-  ["Guadalajara", "Tigres"],
-  ["Cruz Azul", "Atlas"],
-  ["Pachuca", "Toluca"]
-];
+let mensajeWhatsApp = "";
 
-let datosGuardados = null;
-const app = document.getElementById("app");
+function guardarQuiniela(){
 
-function render() {
-  app.innerHTML = "";
+    let nombre = document.getElementById("nombre").value;
 
-  const inputNombre = document.createElement("input");
-  inputNombre.type = "text";
-  inputNombre.id = "nombre";
-  inputNombre.placeholder = "Ingresa tu nombre";
-  app.appendChild(inputNombre);
+    let pumas = document.getElementById("pumas").value;
+    let pachuca = document.getElementById("pachuca").value;
 
-  partidos.forEach((p, i) => {
-    const div = document.createElement("div");
-    div.className = "match";
+    let gdl = document.getElementById("gdl").value;
+    let cruzazul = document.getElementById("cruzazul").value;
 
-    div.innerHTML = `
-      <div class="teams">${p[0]} vs ${p[1]}</div>
-      <div class="score">
-        <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" id="golA${i}" placeholder="${p[0]}">
-        <span>-</span>
-        <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" id="golB${i}" placeholder="${p[1]}">
-      </div>
-    `;
+    document.getElementById("resultado").style.display = "block";
 
-    app.appendChild(div);
-  });
+    document.getElementById("resNombre").innerHTML =
+    "👤 Participante: <b>" + nombre + "</b>";
 
-  const btnEnviar = document.createElement("button");
-  btnEnviar.textContent = "Guardar Quiniela";
-  btnEnviar.onclick = enviar;
-  app.appendChild(btnEnviar);
+    document.getElementById("res1").innerHTML =
+    "⚽ Pumas " + pumas + " - " + pachuca + " Pachuca";
 
-  const btnPDF = document.createElement("button");
-  btnPDF.textContent = "Descargar PDF";
-  btnPDF.onclick = descargarPDF;
-  app.appendChild(btnPDF);
+    document.getElementById("res2").innerHTML =
+    "⚽ Guadalajara " + gdl + " - " + cruzazul + " Cruz Azul";
 
-  const btnWhats = document.createElement("button");
-  btnWhats.textContent = "Enviar por WhatsApp";
-  btnWhats.onclick = enviarWhatsApp;
-  app.appendChild(btnWhats);
+    mensajeWhatsApp =
+`⚽ QUINIELA LIGA MX
 
-  const resultado = document.createElement("div");
-  resultado.id = "resultado";
-  resultado.className = "result";
-  app.appendChild(resultado);
+👤 Participante: ${nombre}
+
+🏆 Pumas ${pumas} - ${pachuca} Pachuca
+
+🏆 Guadalajara ${gdl} - ${cruzazul} Cruz Azul`;
+
+    document.getElementById("btnWhatsapp").style.display = "block";
+
 }
 
-function enviar() {
-  const nombre = document.getElementById("nombre").value.trim();
+function enviarWhatsApp(){
 
-  if (!nombre) {
-    alert("Ingresa tu nombre");
-    return;
-  }
+    let url = "https://wa.me/?text=" + encodeURIComponent(mensajeWhatsApp);
 
-  let resultados = [];
+    window.open(url, "_blank");
 
-  for (let i = 0; i < partidos.length; i++) {
-    const golA = document.getElementById(`golA${i}`).value;
-    const golB = document.getElementById(`golB${i}`).value;
-
-    if (golA === "" || golB === "") {
-      alert("Completa todos los marcadores");
-      return;
-    }
-
-    resultados.push({ golA, golB });
-  }
-
-  datosGuardados = { nombre, resultados };
-  mostrarResultado();
 }
 
-function mostrarResultado() {
-  const resultadoDiv = document.getElementById("resultado");
-
-  let html = `<h3>Jugador: ${datosGuardados.nombre}</h3><ul>`;
-
-  datosGuardados.resultados.forEach((r, i) => {
-    html += `<li>${partidos[i][0]} ${r.golA} - ${r.golB} ${partidos[i][1]}</li>`;
-  });
-
-  html += "</ul>";
-  resultadoDiv.innerHTML = html;
-}
-
-function descargarPDF() {
-  if (!datosGuardados) {
-    alert("Primero guarda la quiniela");
-    return;
-  }
-
-  const doc = new jsPDF();
-
-  doc.setFillColor(13, 71, 161);
-  doc.rect(0, 0, 210, 35, "F");
-
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(18);
-  doc.text("QUINIELA DE FÚTBOL CBT2", 105, 18, null, null, "center");
-
-  doc.setFontSize(12);
-  doc.text("Marcadores", 105, 26, null, null, "center");
-
-  doc.setTextColor(0, 0, 0);
-  doc.text(`Jugador: ${datosGuardados.nombre}`, 20, 50);
-
-  let y = 65;
-
-  datosGuardados.resultados.forEach((r, i) => {
-    doc.roundedRect(15, y - 8, 180, 12, 3, 3);
-    doc.text(`${partidos[i][0]} ${r.golA} - ${r.golB} ${partidos[i][1]}`, 20, y);
-    y += 18;
-  });
-
-  doc.save(`quiniela_${datosGuardados.nombre}.pdf`);
-}
-
-function enviarWhatsApp() {
-  if (!datosGuardados) {
-    alert("Primero guarda la quiniela");
-    return;
-  }
-
-  let mensaje = `Quiniela de Fútbol\nJugador: ${datosGuardados.nombre}\n\n`;
-
-  datosGuardados.resultados.forEach((r, i) => {
-    mensaje += `${partidos[i][0]} ${r.golA} - ${r.golB} ${partidos[i][1]}\n`;
-  });
-
-  const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
-  window.open(url, "_blank");
-}
-
-render();
 </script>
 
 </body>
