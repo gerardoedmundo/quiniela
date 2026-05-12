@@ -1,10 +1,16 @@
+# Quiniela Liga MX - Azul y Oro
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiniela Liga MX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -12,155 +18,213 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
-    background:linear-gradient(135deg,#071326,#0d2340,#133b68);
+    font-family:'Poppins',sans-serif;
+    background:
+    linear-gradient(rgba(4,15,34,0.92), rgba(4,15,34,0.95)),
+    linear-gradient(135deg,#06152b,#0b2b52,#0f3e73);
     min-height:100vh;
     color:white;
     padding:20px;
 }
 
 .container{
-    max-width:900px;
+    max-width:950px;
     margin:auto;
 }
 
-.title{
+.header{
     text-align:center;
-    margin-bottom:30px;
+    margin-bottom:35px;
 }
 
-.title h1{
-    font-size:2.3rem;
-    margin-bottom:10px;
+.header h1{
+    font-size:3rem;
+    font-weight:700;
+    color:#ffd54f;
+    text-shadow:0 0 20px rgba(255,213,79,0.3);
 }
 
-.title p{
-    opacity:0.8;
+.header p{
+    margin-top:10px;
+    color:#d8e7ff;
+    font-size:1rem;
 }
 
 .card{
     background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:22px;
-    padding:20px;
-    margin-bottom:25px;
-    backdrop-filter:blur(10px);
-    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:28px;
+    padding:28px;
+    margin-bottom:28px;
+    backdrop-filter:blur(12px);
+    box-shadow:0 15px 40px rgba(0,0,0,0.35);
 }
 
 .match-title{
     text-align:center;
-    font-size:1.4rem;
-    font-weight:bold;
-    margin-bottom:20px;
+    font-size:1.5rem;
+    font-weight:600;
+    margin-bottom:30px;
+    color:#ffd54f;
 }
 
 .teams{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:15px;
+    gap:20px;
     flex-wrap:wrap;
 }
 
 .team{
     flex:1;
-    min-width:120px;
+    min-width:220px;
     text-align:center;
 }
 
-.team-name{
-    margin-bottom:10px;
-    font-size:1.1rem;
-    font-weight:bold;
-}
-
-select{
+.team-button{
     width:100%;
-    padding:14px;
+    padding:18px;
     border:none;
-    border-radius:14px;
-    font-size:1rem;
-    font-weight:bold;
+    border-radius:22px;
+    margin-bottom:18px;
+    color:white;
+    font-size:1.1rem;
+    font-weight:700;
+    letter-spacing:1px;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+.team-button:hover{
+    transform:translateY(-4px) scale(1.02);
+}
+
+.pumas{
+    background:linear-gradient(135deg,#c89b3c,#ffd54f);
+    color:#071326;
+}
+
+.pachuca{
+    background:linear-gradient(135deg,#1565c0,#42a5f5);
+}
+
+.gdl{
+    background:linear-gradient(135deg,#c62828,#ef5350);
+}
+
+.cruzazul{
+    background:linear-gradient(135deg,#0d47a1,#1976d2);
+}
+
+.score-select{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:18px;
+    font-size:1.1rem;
+    font-weight:700;
     text-align:center;
-    color:#0d2340;
+    background:#ffffff;
+    color:#071326;
+    outline:none;
 }
 
 .vs{
-    font-size:1.6rem;
-    font-weight:bold;
+    font-size:2rem;
+    font-weight:700;
+    color:#ffd54f;
 }
 
-.extra{
-    margin-top:10px;
+.form-title{
+    font-size:1.2rem;
+    font-weight:600;
+    margin-bottom:15px;
+    color:#ffd54f;
 }
 
-.extra label{
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
     display:block;
-    margin-bottom:8px;
-    font-weight:bold;
+    margin-bottom:10px;
+    font-weight:500;
 }
 
-input{
+.input-group input{
     width:100%;
-    padding:14px;
+    padding:16px;
     border:none;
-    border-radius:14px;
+    border-radius:18px;
     font-size:1rem;
+    outline:none;
 }
 
-button{
+.btn{
     width:100%;
-    padding:15px;
-    margin-top:20px;
+    padding:17px;
     border:none;
-    border-radius:15px;
+    border-radius:20px;
     font-size:1rem;
-    font-weight:bold;
+    font-weight:700;
     cursor:pointer;
     transition:0.3s;
 }
 
 .btn-save{
-    background:#00c853;
-    color:white;
+    background:linear-gradient(135deg,#ffd54f,#ffca28);
+    color:#071326;
+    margin-bottom:15px;
 }
 
 .btn-save:hover{
-    background:#00e676;
+    transform:scale(1.02);
 }
 
 .btn-whatsapp{
-    background:#25D366;
+    background:linear-gradient(135deg,#1db954,#25d366);
     color:white;
     display:none;
 }
 
 .btn-whatsapp:hover{
-    background:#2df07a;
+    transform:scale(1.02);
 }
 
 .resultado{
+    margin-top:25px;
     display:none;
-    margin-top:20px;
     background:rgba(255,255,255,0.08);
-    padding:20px;
-    border-radius:20px;
+    border-radius:25px;
+    padding:25px;
 }
 
 .resultado h2{
     text-align:center;
-    margin-bottom:15px;
+    margin-bottom:20px;
+    color:#ffd54f;
 }
 
 .resultado p{
-    margin:10px 0;
+    margin:12px 0;
+    font-size:1.05rem;
 }
 
-@media(max-width:700px){
+.footer{
+    margin-top:25px;
+    text-align:center;
+    color:#c8d8f2;
+    opacity:0.8;
+    font-size:0.9rem;
+}
+
+@media(max-width:768px){
 
     .teams{
         flex-direction:column;
@@ -170,8 +234,12 @@ button{
         margin:10px 0;
     }
 
-    .title h1{
-        font-size:1.8rem;
+    .header h1{
+        font-size:2.2rem;
+    }
+
+    .card{
+        padding:20px;
     }
 
 }
@@ -183,9 +251,9 @@ button{
 
 <div class="container">
 
-    <div class="title">
+    <div class="header">
         <h1>⚽ Quiniela Liga MX</h1>
-        <p>Semifinales - Marcador Global</p>
+        <p>Semifinales · Marcador Global</p>
     </div>
 
     <!-- PARTIDO 1 -->
@@ -198,9 +266,11 @@ button{
         <div class="teams">
 
             <div class="team">
-                <div class="team-name">Pumas</div>
+                <button class="team-button pumas">
+                    🐾 PUMAS
+                </button>
 
-                <select id="pumas">
+                <select class="score-select" id="pumas">
                     <option>0</option>
                     <option>1</option>
                     <option>2</option>
@@ -218,9 +288,11 @@ button{
             <div class="vs">VS</div>
 
             <div class="team">
-                <div class="team-name">Pachuca</div>
+                <button class="team-button pachuca">
+                    ⚽ PACHUCA
+                </button>
 
-                <select id="pachuca">
+                <select class="score-select" id="pachuca">
                     <option>0</option>
                     <option>1</option>
                     <option>2</option>
@@ -249,9 +321,11 @@ button{
         <div class="teams">
 
             <div class="team">
-                <div class="team-name">Guadalajara</div>
+                <button class="team-button gdl">
+                    🐐 GUADALAJARA
+                </button>
 
-                <select id="gdl">
+                <select class="score-select" id="gdl">
                     <option>0</option>
                     <option>1</option>
                     <option>2</option>
@@ -269,9 +343,11 @@ button{
             <div class="vs">VS</div>
 
             <div class="team">
-                <div class="team-name">Cruz Azul</div>
+                <button class="team-button cruzazul">
+                    🚂 CRUZ AZUL
+                </button>
 
-                <select id="cruzazul">
+                <select class="score-select" id="cruzazul">
                     <option>0</option>
                     <option>1</option>
                     <option>2</option>
@@ -290,33 +366,38 @@ button{
 
     </div>
 
-    <!-- NOMBRE -->
+    <!-- FORMULARIO -->
     <div class="card">
 
-        <div class="extra">
-            <label>Nombre del participante</label>
+        <div class="form-title">
+            Registro del participante
+        </div>
+
+        <div class="input-group">
+            <label>Nombre</label>
             <input type="text" id="nombre" placeholder="Escribe tu nombre">
         </div>
 
-        <button class="btn-save" onclick="guardarQuiniela()">
-            Guardar Quiniela
+        <button class="btn btn-save" onclick="guardarQuiniela()">
+            💾 Guardar Quiniela
         </button>
 
-        <button class="btn-whatsapp" id="btnWhatsapp" onclick="enviarWhatsApp()">
-            Enviar por WhatsApp
+        <button class="btn btn-whatsapp" id="btnWhatsapp" onclick="enviarWhatsApp()">
+            📲 Enviar por WhatsApp
         </button>
+
+        <div class="resultado" id="resultado">
+            <h2>✅ Quiniela Registrada</h2>
+
+            <p id="resNombre"></p>
+            <p id="res1"></p>
+            <p id="res2"></p>
+        </div>
 
     </div>
 
-    <!-- RESULTADO -->
-    <div class="resultado" id="resultado">
-
-        <h2>✅ Quiniela Guardada</h2>
-
-        <p id="resNombre"></p>
-        <p id="res1"></p>
-        <p id="res2"></p>
-
+    <div class="footer">
+        Quiniela Liga MX · Diseñada para celular y GitHub Pages
     </div>
 
 </div>
@@ -327,43 +408,43 @@ let mensajeWhatsApp = "";
 
 function guardarQuiniela(){
 
-    let nombre = document.getElementById("nombre").value;
+    let nombre = document.getElementById('nombre').value;
 
-    let pumas = document.getElementById("pumas").value;
-    let pachuca = document.getElementById("pachuca").value;
+    let pumas = document.getElementById('pumas').value;
+    let pachuca = document.getElementById('pachuca').value;
 
-    let gdl = document.getElementById("gdl").value;
-    let cruzazul = document.getElementById("cruzazul").value;
+    let gdl = document.getElementById('gdl').value;
+    let cruzazul = document.getElementById('cruzazul').value;
 
-    document.getElementById("resultado").style.display = "block";
+    document.getElementById('resultado').style.display = 'block';
 
-    document.getElementById("resNombre").innerHTML =
-    "👤 Participante: <b>" + nombre + "</b>";
+    document.getElementById('btnWhatsapp').style.display = 'block';
 
-    document.getElementById("res1").innerHTML =
-    "⚽ Pumas " + pumas + " - " + pachuca + " Pachuca";
+    document.getElementById('resNombre').innerHTML =
+    '👤 Participante: <b>' + nombre + '</b>';
 
-    document.getElementById("res2").innerHTML =
-    "⚽ Guadalajara " + gdl + " - " + cruzazul + " Cruz Azul";
+    document.getElementById('res1').innerHTML =
+    '⚽ Pumas <b>' + pumas + '</b> - <b>' + pachuca + '</b> Pachuca';
+
+    document.getElementById('res2').innerHTML =
+    '⚽ Guadalajara <b>' + gdl + '</b> - <b>' + cruzazul + '</b> Cruz Azul';
 
     mensajeWhatsApp =
 `⚽ QUINIELA LIGA MX
 
 👤 Participante: ${nombre}
 
-🏆 Pumas ${pumas} - ${pachuca} Pachuca
+🐾 Pumas ${pumas} - ${pachuca} Pachuca
 
-🏆 Guadalajara ${gdl} - ${cruzazul} Cruz Azul`;
-
-    document.getElementById("btnWhatsapp").style.display = "block";
+🐐 Guadalajara ${gdl} - ${cruzazul} Cruz Azul`;
 
 }
 
 function enviarWhatsApp(){
 
-    let url = "https://wa.me/?text=" + encodeURIComponent(mensajeWhatsApp);
+    let url = 'https://wa.me/?text=' + encodeURIComponent(mensajeWhatsApp);
 
-    window.open(url, "_blank");
+    window.open(url, '_blank');
 
 }
 
@@ -371,3 +452,19 @@ function enviarWhatsApp(){
 
 </body>
 </html>
+```
+
+## Cómo subirlo a GitHub Pages
+
+1. Crea un repositorio nuevo en GitHub.
+2. Sube este archivo como `index.html`.
+3. Ve a:
+
+   * Settings
+   * Pages
+4. En “Branch” selecciona:
+
+   * `main`
+   * `/root`
+5. Guarda los cambios.
+6. GitHub generará tu enlace público automáticamente.
