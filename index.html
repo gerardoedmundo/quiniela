@@ -375,6 +375,15 @@ body{
             <input type="text" id="nombre" placeholder="Escribe tu nombre">
         </div>
 
+        <div class="input-group">
+            <label>¿La quiniela ya fue pagada?</label>
+
+            <select class="score-select" id="pagado">
+                <option value="no">❌ No pagada</option>
+                <option value="si">✅ Sí pagada</option>
+            </select>
+        </div>
+
         <button class="btn btn-save" onclick="guardarQuiniela()">
             💾 Guardar Quiniela
         </button>
@@ -407,6 +416,8 @@ function guardarQuiniela(){
 
     let nombre = document.getElementById('nombre').value;
 
+    let pagado = document.getElementById('pagado').value;
+
     let pumas = document.getElementById('pumas').value;
     let pachuca = document.getElementById('pachuca').value;
 
@@ -415,7 +426,17 @@ function guardarQuiniela(){
 
     document.getElementById('resultado').style.display = 'block';
 
-    document.getElementById('btnWhatsapp').style.display = 'block';
+    if(pagado === 'si'){
+
+        document.getElementById('btnWhatsapp').style.display = 'block';
+
+    }else{
+
+        document.getElementById('btnWhatsapp').style.display = 'none';
+
+        alert('⚠️ La quiniela no ha sido pagada.');
+
+    }
 
     document.getElementById('resNombre').innerHTML =
     '👤 Participante: <b>' + nombre + '</b>';
@@ -433,7 +454,9 @@ function guardarQuiniela(){
 
 🐾 Pumas ${pumas} - ${pachuca} Pachuca
 
-🐐 Guadalajara ${gdl} - ${cruzazul} Cruz Azul`;
+🐐 Guadalajara ${gdl} - ${cruzazul} Cruz Azul
+
+💰 Estado: ${pagado === 'si' ? 'PAGADA ✅' : 'NO PAGADA ❌'}`;
 
 }
 
