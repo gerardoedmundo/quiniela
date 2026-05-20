@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- LIBRERÍAS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -33,7 +32,6 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f172a,
 .footer{text-align:center;margin-top:25px;color:#cbd5e1;font-size:0.9rem;}
 .badge{display:inline-block;padding:8px 16px;background:#22c55e;border-radius:999px;font-size:0.9rem;margin-top:10px;}
 .deadline{background:#ef4444;padding:10px;border-radius:12px;text-align:center;margin-bottom:15px;}
-.locked{opacity:0.5;pointer-events:none;}
 .score-box{display:inline-block;width:50px;height:25px;border:2px solid white;border-radius:6px;margin-left:10px;}
 .notice{background:#22c55e;padding:10px;border-radius:12px;text-align:center;margin-bottom:15px;}
 </style>
@@ -51,104 +49,53 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f172a,
 <div class="deadline" id="deadlineMsg"></div>
 <div class="notice">📌 1. Descarga tu PDF → 2. Envíalo por WhatsApp</div>
 
-<form class="card" id="formulario">
+<div class="card">
 <h2 class="section-title">👤 Datos del Jugador</h2>
-<div class="grid">
-<div class="input-group">
-<label>Nombre del jugador</label>
-<input type="text" id="nombre">
+<input type="text" id="nombre" placeholder="Nombre del jugador">
 </div>
-</div>
-</form>
 
-<form class="card">
+<div class="card">
 <h2 class="section-title">🏅 Marcador Global <span class="score-box"></span></h2>
 <div class="grid">
-<div class="input-group">
-<label>Global Pumas</label>
-<input type="number" id="global_pumas">
-</div>
-<div class="input-group">
-<label>Global Cruz Azul</label>
-<input type="number" id="global_cruz">
+<input type="number" id="global_pumas" placeholder="Pumas">
+<input type="number" id="global_cruz" placeholder="Cruz Azul">
 </div>
 </div>
-</form>
 
-<form class="card">
+<div class="card">
 <h2 class="section-title">🎯 Preguntas Especiales</h2>
-<div class="grid">
 
-<div class="input-group">
-<label>Equipo Campeón <span class="score-box"></span></label>
+<label>Campeón</label>
 <select id="campeon"><option>Pumas</option><option>Cruz Azul</option></select>
-</div>
 
-<div class="input-group">
-<label>¿Quién mete el primer gol? <span class="score-box"></span></label>
+<label>Primer gol</label>
 <select id="primerGol"><option>Pumas</option><option>Cruz Azul</option><option>No hay gol</option></select>
-</div>
 
-<div class="input-group">
-<label>Rango del primer gol <span class="score-box"></span></label>
+<label>Rango gol</label>
 <select id="rangoGol"><option>1-30</option><option>31-60</option><option>61-90</option><option>91-120</option></select>
-</div>
 
-<div class="input-group">
-<label>¿Habrá tarjeta roja? <span class="score-box"></span></label>
+<label>Roja</label>
 <select id="roja"><option>Sí</option><option>No</option></select>
-</div>
 
-<div class="input-group">
-<label>¿Habrá penal en tiempo regular? <span class="score-box"></span></label>
+<label>Penal</label>
 <select id="penal"><option>Sí</option><option>No</option></select>
-</div>
 
-<div class="input-group">
-<label>¿Habrá tiempos extra? <span class="score-box"></span></label>
+<label>Extra</label>
 <select id="extra"><option>Sí</option><option>No</option></select>
-</div>
 
-<div class="input-group">
-<label>¿Se irán a penales terminando tiempo regular? <span class="score-box"></span></label>
+<label>Penales</label>
 <select id="penales"><option>Sí</option><option>No</option></select>
-</div>
 
-<div class="input-group">
-<label>¿Habrá autogol? <span class="score-box"></span></label>
+<label>Autogol</label>
 <select id="autogol"><option>Sí</option><option>No</option></select>
-</div>
 
-<div class="input-group">
-<label>Minuto exacto del primer gol <span class="score-box"></span></label>
+<label>Minuto</label>
 <input type="number" id="minuto">
-</div>
 
-</div>
-</form>
-
-<div class="card points">
-<h2 class="section-title">📊 Sistema de Puntos</h2>
-<table>
-<thead><tr><th>Pregunta</th><th>Puntos</th></tr></thead>
-<tbody>
-<tr><td>Marcador Global</td><td>6 pts</td></tr>
-<tr><td>Equipo Campeón</td><td>5 pts</td></tr>
-<tr><td>Primer Gol</td><td>3 pts</td></tr>
-<tr><td>Rango del primer gol</td><td>4 pts</td></tr>
-<tr><td>Tarjeta Roja</td><td>2 pts</td></tr>
-<tr><td>Penal</td><td>2 pts</td></tr>
-<tr><td>Tiempos Extra</td><td>3 pts</td></tr>
-<tr><td>Penales</td><td>3 pts</td></tr>
-<tr><td>Autogol</td><td>2 pts</td></tr>
-</tbody>
-</table>
 </div>
 
 <button class="submit-btn" onclick="generarPDF(event)">📄 Descargar PDF</button>
 <button class="submit-btn" onclick="enviarWhatsApp(event)">📲 Enviar por WhatsApp</button>
-
-<div class="footer">Quiniela creada para la Final Liga MX ⚽</div>
 
 </div>
 
@@ -159,44 +106,61 @@ function generarFolio(){return "Q-"+Math.floor(100000+Math.random()*900000)}
 
 function verificar(){
 const msg=document.getElementById("deadlineMsg");
-if(new Date()>fechaLimite){
-msg.innerText="⛔ Quiniela cerrada";
-}else{
-msg.innerText="⏳ Fecha límite: 21 mayo 17:00";
-}
+msg.innerText=new Date()>fechaLimite ? "⛔ Cerrado" : "⏳ Fecha límite: 21 mayo 17:00";
 }
 
 async function generarPDF(e){
 e.preventDefault();
-
 if(new Date()>fechaLimite)return alert("Cerrado");
 
 let folio = generarFolio();
 let header = document.querySelector(".header");
+let f = document.createElement("p");
+f.innerText="Folio: "+folio;
+header.appendChild(f);
 
-let folioDiv = document.createElement("div");
-folioDiv.innerHTML = `<p>Folio: ${folio}</p>`;
-header.appendChild(folioDiv);
+// modo blanco y negro
+document.body.style.background="#fff";
+document.body.style.color="#000";
 
-const canvas = await html2canvas(document.getElementById("contenido"));
-const imgData = canvas.toDataURL("image/png");
+document.querySelectorAll(".card").forEach(c=>{
+c.style.background="#fff";
+c.style.color="#000";
+c.style.border="1px solid #000";
+});
 
-const { jsPDF } = window.jspdf;
-const pdf = new jsPDF("p","mm","a4");
+// captura
+const canvas = await html2canvas(document.getElementById("contenido"),{scale:2});
+const img = canvas.toDataURL("image/png");
 
-const width = pdf.internal.pageSize.getWidth();
-const height = (canvas.height * width) / canvas.width;
+const {jsPDF}=window.jspdf;
+const pdf=new jsPDF();
 
-pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+let w=pdf.internal.pageSize.getWidth();
+let h=(canvas.height*w)/canvas.width;
+
+let heightLeft=h;
+let pos=0;
+
+pdf.addImage(img,'PNG',0,pos,w,h);
+heightLeft-=pdf.internal.pageSize.getHeight();
+
+while(heightLeft>0){
+pos=heightLeft-h;
+pdf.addPage();
+pdf.addImage(img,'PNG',0,pos,w,h);
+heightLeft-=pdf.internal.pageSize.getHeight();
+}
+
 pdf.save("quiniela.pdf");
 
-folioDiv.remove();
+// restaurar
+location.reload();
 }
 
 function enviarWhatsApp(e){
 e.preventDefault();
-let msg="Ya llené mi quiniela 📄%0AAdjunto el PDF aquí 👇";
-window.open(`https://wa.me/?text=${msg}`);
+window.open("https://wa.me/?text=Ya llené mi quiniela y adjunto el PDF");
 }
 
 verificar();
