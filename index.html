@@ -16,7 +16,7 @@
 body{
 font-family:'Poppins',sans-serif;
 background:linear-gradient(135deg,#d4af37,#f5d76e,#c9a227);
-padding:25px;
+padding:20px;
 color:#000;
 }
 
@@ -51,28 +51,35 @@ justify-content:space-between;
 align-items:center;
 }
 
+/* 🔥 FIX REAL DEL GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
+grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+gap:10px;
 align-items:center;
+width:100%;
 }
 
 .input-group{
 display:flex;
 flex-direction:column;
+width:100%;
+min-width:0;
 }
 
 input,select{
 padding:10px;
 border:1px solid #b8962e;
 border-radius:10px;
+width:100%;
+min-width:0;
 }
 
 .vs{
 text-align:center;
-font-size:22px;
+font-size:20px;
 font-weight:bold;
+white-space:nowrap;
 }
 
 .points table{
@@ -119,7 +126,7 @@ margin-bottom:10px;
 
 .preguntas-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:12px;
 }
 
@@ -135,6 +142,17 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:5px;
+}
+
+/* 📱 RESPONSIVE */
+@media(max-width:768px){
+.grid{
+grid-template-columns:1fr;
+}
+
+.vs{
+font-size:16px;
+}
 }
 
 /* PDF */
@@ -155,12 +173,12 @@ margin-bottom:5px;
 <div class="badge">13 Participantes</div>
 </div>
 
-<div class="deadline" id="deadlineMsg"></div>
+<div class="deadline">Fecha límite: 21 mayo 17:00</div>
 
 <div class="card">
 <h2 class="section-title">👤 Selecciona tu nombre:</h2>
 
-<select id="nombre">
+<select>
 <option value="">Selecciona tu nombre</option>
 <option>GERARDO CALZADA</option>
 <option>GERARDO MOCIÑO</option>
@@ -185,14 +203,14 @@ margin-bottom:5px;
 
 <div class="input-group">
 <label>PUMAS</label>
-<input type="number" id="global_pumas">
+<input type="number">
 </div>
 
 <div class="vs">VS</div>
 
 <div class="input-group">
 <label>CRUZ AZUL</label>
-<input type="number" id="global_cruz">
+<input type="number">
 </div>
 
 </div>
@@ -212,56 +230,56 @@ margin-bottom:5px;
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Quién mete primer gol</span><span class="score-box"></span>
+<span>Primer gol</span><span class="score-box"></span>
 </div>
 <select><option>Pumas</option><option>Cruz Azul</option><option>No hay gol</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Rango de tiempo del 1er gol</span><span class="score-box"></span>
+<span>Rango gol</span><span class="score-box"></span>
 </div>
 <select><option>1-30</option><option>31-60</option><option>61-90</option><option>91-120</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Habra tarjeta roja</span><span class="score-box"></span>
+<span>Tarjeta roja</span><span class="score-box"></span>
 </div>
 <select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Habrá penal en tiempo regular</span><span class="score-box"></span>
+<span>Penal</span><span class="score-box"></span>
 </div>
 <select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Habrá tiempos extras</span><span class="score-box"></span>
+<span>Tiempos extra</span><span class="score-box"></span>
 </div>
 <select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Se irán a penales</span><span class="score-box"></span>
+<span>Penales</span><span class="score-box"></span>
 </div>
 <select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Habrá autogol</span><span class="score-box"></span>
+<span>Autogol</span><span class="score-box"></span>
 </div>
 <select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Minuto exacto del primer gol</span><span class="score-box"></span>
+<span>Minuto gol</span><span class="score-box"></span>
 </div>
 <input type="number">
 </div>
@@ -281,7 +299,6 @@ margin-bottom:5px;
 <tr><td>Extra</td><td>3</td></tr>
 <tr><td>Penales</td><td>3</td></tr>
 <tr><td>Autogol</td><td>2</td></tr>
-<tr><td>Minuto</td><td>2</td></tr>
 </table>
 </div>
 
@@ -296,11 +313,14 @@ e.preventDefault();
 html2canvas(document.getElementById("contenido"),{scale:3}).then(canvas=>{
 const {jsPDF}=window.jspdf;
 const pdf=new jsPDF("p","mm","a4");
+
 const w=pdf.internal.pageSize.getWidth();
 const h=pdf.internal.pageSize.getHeight();
+
 const imgH=h;
 const imgW=(canvas.width*imgH)/canvas.height;
 const x=(w-imgW)/2;
+
 pdf.addImage(canvas.toDataURL("image/png"),"PNG",x,0,imgW,imgH);
 pdf.save("quiniela.pdf");
 });
