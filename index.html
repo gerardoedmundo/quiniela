@@ -9,7 +9,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- LIBRERÍAS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -33,11 +35,12 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f172a,
 .deadline{background:#ef4444;padding:10px;border-radius:12px;text-align:center;margin-bottom:15px;}
 .locked{opacity:0.5;pointer-events:none;}
 .score-box{display:inline-block;width:50px;height:25px;border:2px solid white;border-radius:6px;margin-left:10px;}
+.notice{background:#22c55e;padding:10px;border-radius:12px;text-align:center;margin-bottom:15px;}
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="container" id="contenido">
 
 <div class="header">
 <h1>🏆 Quiniela Final Liga MX</h1>
@@ -46,6 +49,7 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f172a,
 </div>
 
 <div class="deadline" id="deadlineMsg"></div>
+<div class="notice">📌 1. Descarga tu PDF → 2. Envíalo por WhatsApp</div>
 
 <form class="card" id="formulario">
 <h2 class="section-title">👤 Datos del Jugador</h2>
@@ -74,42 +78,52 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f172a,
 <form class="card">
 <h2 class="section-title">🎯 Preguntas Especiales</h2>
 <div class="grid">
+
 <div class="input-group">
 <label>Equipo Campeón <span class="score-box"></span></label>
 <select id="campeon"><option>Pumas</option><option>Cruz Azul</option></select>
 </div>
+
 <div class="input-group">
 <label>¿Quién mete el primer gol? <span class="score-box"></span></label>
 <select id="primerGol"><option>Pumas</option><option>Cruz Azul</option><option>No hay gol</option></select>
 </div>
+
 <div class="input-group">
 <label>Rango del primer gol <span class="score-box"></span></label>
 <select id="rangoGol"><option>1-30</option><option>31-60</option><option>61-90</option><option>91-120</option></select>
 </div>
+
 <div class="input-group">
 <label>¿Habrá tarjeta roja? <span class="score-box"></span></label>
 <select id="roja"><option>Sí</option><option>No</option></select>
 </div>
+
 <div class="input-group">
 <label>¿Habrá penal en tiempo regular? <span class="score-box"></span></label>
 <select id="penal"><option>Sí</option><option>No</option></select>
 </div>
+
 <div class="input-group">
 <label>¿Habrá tiempos extra? <span class="score-box"></span></label>
 <select id="extra"><option>Sí</option><option>No</option></select>
 </div>
+
 <div class="input-group">
 <label>¿Se irán a penales terminando tiempo regular? <span class="score-box"></span></label>
 <select id="penales"><option>Sí</option><option>No</option></select>
 </div>
+
 <div class="input-group">
 <label>¿Habrá autogol? <span class="score-box"></span></label>
 <select id="autogol"><option>Sí</option><option>No</option></select>
 </div>
+
 <div class="input-group">
 <label>Minuto exacto del primer gol <span class="score-box"></span></label>
 <input type="number" id="minuto">
 </div>
+
 </div>
 </form>
 
@@ -144,58 +158,44 @@ const fechaLimite = new Date("2026-05-21T17:00:00");
 function generarFolio(){return "Q-"+Math.floor(100000+Math.random()*900000)}
 
 function verificar(){
-const form=document.getElementById("formulario");
 const msg=document.getElementById("deadlineMsg");
-if(new Date()>fechaLimite || localStorage.getItem("bloqueado")){
-form.classList.add("locked");
+if(new Date()>fechaLimite){
 msg.innerText="⛔ Quiniela cerrada";
-}else{msg.innerText="⏳ Fecha límite: 21 mayo 17:00";}
-}
-
-function datos(){
-return{
-folio:generarFolio(),
-nombre:document.getElementById("nombre").value,
-global:`${global_pumas.value}-${global_cruz.value}`,
-campeon:campeon.value,
-primerGol:primerGol.value,
-rango:rangoGol.value,
-roja:roja.value,
-penal:penal.value,
-extra:extra.value,
-penales:penales.value,
-autogol:autogol.value,
-minuto:minuto.value
+}else{
+msg.innerText="⏳ Fecha límite: 21 mayo 17:00";
 }
 }
 
-function generarPDF(e){
+async function generarPDF(e){
 e.preventDefault();
+
 if(new Date()>fechaLimite)return alert("Cerrado");
-const {jsPDF}=window.jspdf;
-const doc=new jsPDF();
-const d=datos();
-localStorage.setItem("bloqueado",true);
-let y=20;
-doc.text("Quiniela Liga MX",20,y);y+=10;
-doc.text(`Folio: ${d.folio}`,20,y);y+=10;
-doc.text(`Nombre: ${d.nombre}`,20,y);y+=10;
-Object.entries(d).forEach(([k,v])=>{
-if(k!=="folio"&&k!=="nombre"){
-doc.text(`${k}: ${v}`,20,y);
-doc.text("Puntos: ____",140,y);
-y+=10;}});
-doc.text("TOTAL: ______",20,y+10);
-doc.save(`quiniela_${d.nombre}.pdf`);
-verificar();
+
+let folio = generarFolio();
+let header = document.querySelector(".header");
+
+let folioDiv = document.createElement("div");
+folioDiv.innerHTML = `<p>Folio: ${folio}</p>`;
+header.appendChild(folioDiv);
+
+const canvas = await html2canvas(document.getElementById("contenido"));
+const imgData = canvas.toDataURL("image/png");
+
+const { jsPDF } = window.jspdf;
+const pdf = new jsPDF("p","mm","a4");
+
+const width = pdf.internal.pageSize.getWidth();
+const height = (canvas.height * width) / canvas.width;
+
+pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+pdf.save("quiniela.pdf");
+
+folioDiv.remove();
 }
 
 function enviarWhatsApp(e){
 e.preventDefault();
-if(new Date()>fechaLimite)return alert("Cerrado");
-const d=datos();
-let msg="Quiniela%0A";
-Object.entries(d).forEach(([k,v])=>{msg+=`${k}: ${v}%0A`});
+let msg="Ya llené mi quiniela 📄%0AAdjunto el PDF aquí 👇";
 window.open(`https://wa.me/?text=${msg}`);
 }
 
