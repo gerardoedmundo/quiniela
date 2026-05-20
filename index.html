@@ -53,14 +53,26 @@ align-items:center;
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(3,1fr);
 gap:15px;
+align-items:center;
+}
+
+.input-group{
+display:flex;
+flex-direction:column;
 }
 
 input,select{
 padding:10px;
 border:1px solid #b8962e;
 border-radius:10px;
+}
+
+.vs{
+text-align:center;
+font-size:22px;
+font-weight:bold;
 }
 
 .points table{
@@ -164,18 +176,25 @@ margin-bottom:5px;
 <option>TOMÁS R.</option>
 <option>ZAPATA</option>
 </select>
-
 </div>
 
 <div class="card">
-<h2 class="section-title">
-🏅 Marcador Global
-<span class="score-box"></span>
-</h2>
+<h2 class="section-title">🏅 Marcador Global</h2>
 
 <div class="grid">
-<input type="number" id="global_pumas" placeholder="Pumas">
-<input type="number" id="global_cruz" placeholder="Cruz Azul">
+
+<div class="input-group">
+<label>PUMAS</label>
+<input type="number" id="global_pumas">
+</div>
+
+<div class="vs">VS</div>
+
+<div class="input-group">
+<label>CRUZ AZUL</label>
+<input type="number" id="global_cruz">
+</div>
+
 </div>
 </div>
 
@@ -188,63 +207,63 @@ margin-bottom:5px;
 <div class="pregunta-header">
 <span>Campeón</span><span class="score-box"></span>
 </div>
-<select id="campeon"><option>Pumas</option><option>Cruz Azul</option></select>
+<select><option>Pumas</option><option>Cruz Azul</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Primer gol</span><span class="score-box"></span>
+<span>Quién mete primer gol</span><span class="score-box"></span>
 </div>
-<select id="primerGol"><option>Pumas</option><option>Cruz Azul</option><option>No hay gol</option></select>
+<select><option>Pumas</option><option>Cruz Azul</option><option>No hay gol</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
 <span>Rango de tiempo del 1er gol</span><span class="score-box"></span>
 </div>
-<select id="rangoGol"><option>1-30</option><option>31-60</option><option>61-90</option><option>91-120</option></select>
+<select><option>1-30</option><option>31-60</option><option>61-90</option><option>91-120</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Habrá tarjeta roja</span><span class="score-box"></span>
+<span>Habra tarjeta roja</span><span class="score-box"></span>
 </div>
-<select id="roja"><option>Sí</option><option>No</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Habrá penal</span><span class="score-box"></span>
-</div>
-<select id="penal"><option>Sí</option><option>No</option></select>
+<select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Habrá tiempo extra</span><span class="score-box"></span>
+<span>Habrá penal en tiempo regular</span><span class="score-box"></span>
 </div>
-<select id="extra"><option>Sí</option><option>No</option></select>
+<select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Se irán a Penales</span><span class="score-box"></span>
+<span>Habrá tiempos extras</span><span class="score-box"></span>
 </div>
-<select id="penales"><option>Sí</option><option>No</option></select>
+<select><option>Sí</option><option>No</option></select>
+</div>
+
+<div class="pregunta-item">
+<div class="pregunta-header">
+<span>Se irán a penales</span><span class="score-box"></span>
+</div>
+<select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
 <span>Habrá autogol</span><span class="score-box"></span>
 </div>
-<select id="autogol"><option>Sí</option><option>No</option></select>
+<select><option>Sí</option><option>No</option></select>
 </div>
 
 <div class="pregunta-item">
 <div class="pregunta-header">
-<span>Minuto del 1er gol</span><span class="score-box"></span>
+<span>Minuto exacto del primer gol</span><span class="score-box"></span>
 </div>
-<input type="number" id="minuto">
+<input type="number">
 </div>
 
 </div>
@@ -254,7 +273,6 @@ margin-bottom:5px;
 <h2 class="section-title">📊 Puntos</h2>
 <table>
 <tr><th>Pregunta</th><th>Puntos</th></tr>
-<tr><td>Global</td><td>6</td></tr>
 <tr><td>Campeón</td><td>5</td></tr>
 <tr><td>Primer gol</td><td>3</td></tr>
 <tr><td>Rango</td><td>4</td></tr>
@@ -272,50 +290,24 @@ margin-bottom:5px;
 </div>
 
 <script>
-const fechaLimite = new Date("2026-05-21T17:00:00");
-
-function verificar(){
-document.getElementById("deadlineMsg").innerText =
-new Date()>fechaLimite ? "CERRADO" : "Fecha límite: 21 mayo 17:00";
-}
-
-async function generarPDF(e){
+function generarPDF(e){
 e.preventDefault();
-
-let nombre = document.getElementById("nombre").value;
-if(nombre==="") return alert("Selecciona tu nombre");
-
-if(new Date()>fechaLimite)return alert("Cerrado");
-
-let contenido=document.getElementById("contenido");
-contenido.classList.add("pdf-mode");
-
-document.body.style.background="#fff";
-
-const canvas=await html2canvas(contenido,{scale:3});
-const imgData=canvas.toDataURL("image/png");
-
+html2canvas(document.getElementById("contenido"),{scale:3}).then(canvas=>{
 const {jsPDF}=window.jspdf;
 const pdf=new jsPDF("p","mm","a4");
-
 const w=pdf.internal.pageSize.getWidth();
 const h=pdf.internal.pageSize.getHeight();
-
 const imgH=h;
 const imgW=(canvas.width*imgH)/canvas.height;
 const x=(w-imgW)/2;
-
-pdf.addImage(imgData,"PNG",x,0,imgW,imgH);
+pdf.addImage(canvas.toDataURL("image/png"),"PNG",x,0,imgW,imgH);
 pdf.save("quiniela.pdf");
-
-location.reload();
+});
 }
 
 function enviarWhatsApp(){
 window.open("https://wa.me/?text=Ya llené mi quiniela");
 }
-
-verificar();
 </script>
 
 </body>
