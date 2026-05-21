@@ -51,7 +51,7 @@ justify-content:space-between;
 align-items:center;
 }
 
-/* 🔥 GRID CORREGIDO */
+/* GRID CORREGIDO */
 .grid{
 display:grid;
 grid-template-columns:1fr auto 1fr;
@@ -65,7 +65,6 @@ flex-direction:column;
 width:100%;
 }
 
-/* 🔥 INPUTS */
 input,select{
 padding:12px;
 border:1px solid #b8962e;
@@ -115,7 +114,6 @@ font-weight:600;
 cursor:pointer;
 }
 
-/* 🔥 CUADROS */
 .score-box{
 width:80px;
 height:40px;
@@ -152,7 +150,6 @@ align-items:center;
 margin-bottom:5px;
 }
 
-/* 📱 RESPONSIVE */
 @media (max-width:600px){
 .grid{
 grid-template-columns:1fr;
@@ -163,19 +160,16 @@ margin:5px 0;
 }
 }
 
-/* 📄 PDF */
+/* PDF */
 .pdf-mode{
 font-size:20px;
 }
-
 .pdf-mode h1{font-size:36px;}
 .pdf-mode h2{font-size:24px;}
-
 .pdf-mode input,.pdf-mode select{
 font-size:20px;
 padding:14px;
 }
-
 .pdf-mode .score-box{
 width:90px;
 height:45px;
@@ -191,11 +185,10 @@ height:45px;
 <p>Pumas vs Cruz Azul</p>
 <div class="badge">13 Participantes</div>
 
-<!-- 🔥 NOMBRE EN PDF -->
 <p id="nombrePDF" style="text-align:center;font-weight:bold;margin-top:10px;"></p>
 </div>
 
-<div class="deadline" id="deadlineMsg"></div>
+<div class="deadline"></div>
 
 <div class="card">
 <h2 class="section-title">👤 Selecciona tu nombre:</h2>
@@ -222,7 +215,6 @@ height:45px;
 <h2 class="section-title">🏅 Marcador Global</h2>
 
 <div class="grid">
-
 <div class="input-group">
 <label>PUMAS</label>
 <input type="number" id="global_pumas">
@@ -234,7 +226,6 @@ height:45px;
 <label>CRUZ AZUL</label>
 <input type="number" id="global_cruz">
 </div>
-
 </div>
 </div>
 
@@ -326,7 +317,6 @@ height:45px;
 </div>
 
 <button class="submit-btn" onclick="generarPDF(event)">📄 Descargar PDF</button>
-<button class="submit-btn" onclick="enviarWhatsApp()">📲 WhatsApp</button>
 
 </div>
 
@@ -338,42 +328,49 @@ const contenido = document.getElementById("contenido");
 const nombre = document.getElementById("nombre").value;
 
 if(!nombre){
-alert("Por favor selecciona tu nombre");
+alert("Selecciona tu nombre");
 return;
 }
 
-// 🔥 Mostrar nombre en pantalla/PDF
 document.getElementById("nombrePDF").innerText = "Participante: " + nombre;
 
 contenido.classList.add("pdf-mode");
 
 html2canvas(contenido,{
 scale:1.5,
-backgroundColor:"#ffffff"
+backgroundColor:"#ffffff",
+scrollY:-window.scrollY
 }).then(canvas=>{
 
 const {jsPDF}=window.jspdf;
 const pdf=new jsPDF("p","mm","a4");
 
-const w=pdf.internal.pageSize.getWidth();
+const pageWidth = pdf.internal.pageSize.getWidth();
+const pageHeight = pdf.internal.pageSize.getHeight();
+
+const imgWidth = pageWidth;
+const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+let heightLeft = imgHeight;
+let position = 0;
+
 const imgData = canvas.toDataURL("image/jpeg",0.7);
 
-const imgW = w;
-const imgH = (canvas.height * imgW) / canvas.width;
+pdf.addImage(imgData,"JPEG",0,position,imgWidth,imgHeight);
+heightLeft -= pageHeight;
 
-pdf.addImage(imgData,"JPEG",0,0,imgW,imgH);
+while(heightLeft > 0){
+position = heightLeft - imgHeight;
+pdf.addPage();
+pdf.addImage(imgData,"JPEG",0,position,imgWidth,imgHeight);
+heightLeft -= pageHeight;
+}
 
-// 🔥 Nombre del archivo dinámico
 const nombreArchivo = "Quiniela_" + nombre.replace(/\s+/g,"_") + ".pdf";
-
 pdf.save(nombreArchivo);
 
 contenido.classList.remove("pdf-mode");
 });
-}
-
-function enviarWhatsApp(){
-window.open("https://wa.me/?text=Ya llené mi quiniela");
 }
 </script>
 
