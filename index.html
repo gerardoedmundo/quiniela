@@ -3,333 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiniela Final Liga MX</title>
+<title>Quiniela PRO Liga MX</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
 font-family:'Poppins',sans-serif;
 background:linear-gradient(135deg,#d4af37,#f5d76e,#c9a227);
 padding:20px;
-color:#000;
 }
 
-.container{max-width:1100px;margin:auto;}
-
-.header{text-align:center;margin-bottom:25px;}
-.header h1{font-size:2.5rem;}
-.header p{color:#333;}
-
-.badge{
-background:#000;
-color:#f5d76e;
-padding:6px 15px;
-border-radius:20px;
-display:inline-block;
-margin-top:10px;
-}
+.container{max-width:900px;margin:auto;}
 
 .card{
 background:#fff;
-border:1px solid #b8962e;
-border-radius:20px;
-padding:20px;
-margin-bottom:20px;
-}
-
-.section-title{
-font-size:1.3rem;
+border-radius:15px;
+padding:15px;
 margin-bottom:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
 }
 
-/* 🔥 FIX REAL DEL GRID */
-.grid{
-display:grid;
-grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-gap:10px;
-align-items:center;
-width:100%;
-}
-
-.input-group{
-display:flex;
-flex-direction:column;
-width:100%;
-min-width:0;
+button{
+padding:10px;
+border:none;
+border-radius:10px;
+background:#b8962e;
+cursor:pointer;
+margin-top:5px;
 }
 
 input,select{
+width:100%;
 padding:10px;
-border:1px solid #b8962e;
+margin-top:5px;
 border-radius:10px;
-width:100%;
-min-width:0;
+border:1px solid #ccc;
 }
 
-.vs{
-text-align:center;
-font-size:20px;
-font-weight:bold;
-white-space:nowrap;
-}
-
-.points table{
-width:100%;
-border-collapse:collapse;
-}
-
-.points th{
-background:#b8962e;
-padding:10px;
-}
-
-.points td{
-padding:10px;
-border-bottom:1px solid #b8962e;
-}
-
-.submit-btn{
-width:100%;
-padding:15px;
-border:none;
-border-radius:15px;
-background:#b8962e;
-margin-top:10px;
-font-weight:600;
-cursor:pointer;
-}
-
-.score-box{
-width:60px;
-height:28px;
-border:2px solid #000;
-border-radius:6px;
-}
-
-.deadline{
-background:#000;
-color:#f5d76e;
-padding:10px;
-text-align:center;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-.preguntas-grid{
+.grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:12px;
+grid-template-columns:1fr auto 1fr;
+gap:10px;
+align-items:center;
 }
 
-.pregunta-item{
-border:1px solid #b8962e;
-padding:10px;
-border-radius:10px;
-background:#fff;
+@media(max-width:768px){
+.grid{grid-template-columns:1fr;}
 }
 
-.pregunta-header{
+.ranking-item{
 display:flex;
 justify-content:space-between;
-align-items:center;
-margin-bottom:5px;
+padding:8px;
+border-bottom:1px solid #ddd;
 }
-
-/* 📱 RESPONSIVE */
-@media(max-width:768px){
-.grid{
-grid-template-columns:1fr;
-}
-
-.vs{
-font-size:16px;
-}
-}
-
-/* PDF */
-.pdf-mode{font-size:18px;}
-.pdf-mode h1{font-size:34px;}
-.pdf-mode h2{font-size:22px;}
-.pdf-mode input,.pdf-mode select{font-size:18px;padding:12px;}
-.pdf-mode .score-box{width:70px;height:35px;}
 </style>
 </head>
 
 <body>
-<div class="container" id="contenido">
 
-<div class="header">
-<h1>🏆 Quiniela Final Liga MX</h1>
-<p>Pumas vs Cruz Azul</p>
-<div class="badge">13 Participantes</div>
-</div>
-
-<div class="deadline">Fecha límite: 21 mayo 17:00</div>
+<div class="container">
 
 <div class="card">
-<h2 class="section-title">👤 Selecciona tu nombre:</h2>
+<h2>👤 Jugadores</h2>
 
-<select>
-<option value="">Selecciona tu nombre</option>
-<option>GERARDO CALZADA</option>
-<option>GERARDO MOCIÑO</option>
-<option>TOÑO</option>
-<option>TERRON</option>
-<option>OSCAR</option>
-<option>BRAULIO</option>
-<option>ODYN CALZADA</option>
-<option>TRINI</option>
-<option>LOVERA</option>
-<option>FABIÁN</option>
-<option>VICENTE R.</option>
-<option>TOMÁS R.</option>
-<option>ZAPATA</option>
+<div style="display:flex; gap:10px;">
+<input type="text" id="nuevoAlumno" placeholder="Nombre">
+<button onclick="agregarAlumno()">➕</button>
+</div>
+
+<select id="listaAlumnos"></select>
+</div>
+
+<div class="card">
+<h2>🏅 Marcador</h2>
+<div class="grid">
+<input type="number" id="pumas">
+<div>VS</div>
+<input type="number" id="cruzazul">
+</div>
+</div>
+
+<div class="card">
+<h2>🎯 Campeón</h2>
+<select id="campeon">
+<option>Pumas</option>
+<option>Cruz Azul</option>
 </select>
 </div>
 
-<div class="card">
-<h2 class="section-title">🏅 Marcador Global</h2>
-
-<div class="grid">
-
-<div class="input-group">
-<label>PUMAS</label>
-<input type="number">
-</div>
-
-<div class="vs">VS</div>
-
-<div class="input-group">
-<label>CRUZ AZUL</label>
-<input type="number">
-</div>
-
-</div>
-</div>
+<button onclick="guardarQuiniela()">💾 Guardar Quiniela</button>
+<button onclick="verRanking()">🏆 Ver Ranking</button>
 
 <div class="card">
-<h2 class="section-title">🎯 Preguntas</h2>
-
-<div class="preguntas-grid">
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Equipo Campeón</span><span class="score-box"></span>
+<h2>📊 Ranking</h2>
+<div id="ranking"></div>
 </div>
-<select><option>Pumas</option><option>Cruz Azul</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Quién mete primer gol</span><span class="score-box"></span>
-</div>
-<select><option>Pumas</option><option>Cruz Azul</option><option>No hay gol</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Rango de tiempo del primer gol</span><span class="score-box"></span>
-</div>
-<select><option>1-30</option><option>31-60</option><option>61-90</option><option>91-120</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Habrá tarjeta roja</span><span class="score-box"></span>
-</div>
-<select><option>Sí</option><option>No</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Habrá Penal</span><span class="score-box"></span>
-</div>
-<select><option>Sí</option><option>No</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Habrá tiempos extra</span><span class="score-box"></span>
-</div>
-<select><option>Sí</option><option>No</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Se irán a penales</span><span class="score-box"></span>
-</div>
-<select><option>Sí</option><option>No</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Habrá autogol</span><span class="score-box"></span>
-</div>
-<select><option>Sí</option><option>No</option></select>
-</div>
-
-<div class="pregunta-item">
-<div class="pregunta-header">
-<span>Minuto del primer gol</span><span class="score-box"></span>
-</div>
-<input type="number">
-</div>
-
-</div>
-</div>
-
-<div class="card points">
-<h2 class="section-title">📊 Puntos</h2>
-<table>
-<tr><th>Pregunta</th><th>Puntos</th></tr>
-<tr><td>Campeón</td><td>5</td></tr>
-<tr><td>Primer gol</td><td>3</td></tr>
-<tr><td>Rango</td><td>4</td></tr>
-<tr><td>Roja</td><td>2</td></tr>
-<tr><td>Penal</td><td>2</td></tr>
-<tr><td>Extra</td><td>3</td></tr>
-<tr><td>Penales</td><td>3</td></tr>
-<tr><td>Autogol</td><td>2</td></tr>
-<tr><td>Minuto</td><td>2</td></tr>
-</table>
-</div>
-
-<button class="submit-btn" onclick="generarPDF(event)">📄 Descargar PDF</button>
-<button class="submit-btn" onclick="enviarWhatsApp()">📲 WhatsApp</button>
 
 </div>
 
 <script>
-function generarPDF(e){
-e.preventDefault();
-html2canvas(document.getElementById("contenido"),{scale:3}).then(canvas=>{
-const {jsPDF}=window.jspdf;
-const pdf=new jsPDF("p","mm","a4");
 
-const w=pdf.internal.pageSize.getWidth();
-const h=pdf.internal.pageSize.getHeight();
+// =====================
+// CARGAR AL INICIAR
+// =====================
+window.onload = function(){
+cargarAlumnos();
+};
 
-const imgH=h;
-const imgW=(canvas.width*imgH)/canvas.height;
-const x=(w-imgW)/2;
+// =====================
+// AGREGAR ALUMNO
+// =====================
+function agregarAlumno(){
+const nombre = document.getElementById("nuevoAlumno").value.trim();
+if(nombre==="") return alert("Escribe un nombre");
 
-pdf.addImage(canvas.toDataURL("image/png"),"PNG",x,0,imgW,imgH);
-pdf.save("quiniela.pdf");
+let alumnos = JSON.parse(localStorage.getItem("alumnos")) || [];
+
+if(alumnos.includes(nombre)){
+alert("Ya existe");
+return;
+}
+
+alumnos.push(nombre);
+localStorage.setItem("alumnos", JSON.stringify(alumnos));
+
+document.getElementById("nuevoAlumno").value="";
+cargarAlumnos();
+}
+
+// =====================
+// CARGAR ALUMNOS
+// =====================
+function cargarAlumnos(){
+const select = document.getElementById("listaAlumnos");
+select.innerHTML = "";
+
+let alumnos = JSON.parse(localStorage.getItem("alumnos")) || [];
+
+alumnos.forEach(nombre=>{
+let option = document.createElement("option");
+option.text = nombre;
+select.add(option);
 });
 }
 
-function enviarWhatsApp(){
-window.open("https://wa.me/?text=Ya llené mi quiniela");
+// =====================
+// GUARDAR QUINIELA
+// =====================
+function guardarQuiniela(){
+const nombre = document.getElementById("listaAlumnos").value;
+if(nombre==="") return alert("Selecciona jugador");
+
+const data = {
+pumas: document.getElementById("pumas").value,
+cruzazul: document.getElementById("cruzazul").value,
+campeon: document.getElementById("campeon").value,
+puntos: Math.floor(Math.random()*20) // simulado
+};
+
+let quinielas = JSON.parse(localStorage.getItem("quinielas")) || {};
+
+quinielas[nombre] = data;
+
+localStorage.setItem("quinielas", JSON.stringify(quinielas));
+
+alert("Quiniela guardada");
 }
+
+// =====================
+// RANKING
+// =====================
+function verRanking(){
+let quinielas = JSON.parse(localStorage.getItem("quinielas")) || {};
+
+let lista = [];
+
+for(let nombre in quinielas){
+lista.push({nombre, puntos: quinielas[nombre].puntos});
+}
+
+lista.sort((a,b)=>b.puntos-a.puntos);
+
+const contenedor = document.getElementById("ranking");
+contenedor.innerHTML = "";
+
+lista.forEach((jugador,i)=>{
+contenedor.innerHTML += `
+<div class="ranking-item">
+<span>${i+1}. ${jugador.nombre}</span>
+<strong>${jugador.puntos} pts</strong>
+</div>
+`;
+});
+}
+
 </script>
 
 </body>
