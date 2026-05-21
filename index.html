@@ -63,10 +63,19 @@ display:flex;
 flex-direction:column;
 }
 
+/* 🔥 INPUTS MEJORADOS */
 input,select{
-padding:10px;
+padding:12px;
 border:1px solid #b8962e;
 border-radius:10px;
+font-size:16px;
+}
+
+input[type="number"]{
+font-size:22px;
+font-weight:bold;
+text-align:center;
+height:50px;
 }
 
 .vs{
@@ -101,11 +110,12 @@ font-weight:600;
 cursor:pointer;
 }
 
+/* 🔥 CUADROS GRANDES */
 .score-box{
-width:60px;
-height:28px;
+width:80px;
+height:40px;
 border:2px solid #000;
-border-radius:6px;
+border-radius:8px;
 }
 
 .deadline{
@@ -137,12 +147,23 @@ align-items:center;
 margin-bottom:5px;
 }
 
-/* PDF */
-.pdf-mode{font-size:18px;}
-.pdf-mode h1{font-size:34px;}
-.pdf-mode h2{font-size:22px;}
-.pdf-mode input,.pdf-mode select{font-size:18px;padding:12px;}
-.pdf-mode .score-box{width:70px;height:35px;}
+/* 🔥 MODO PDF MEJORADO */
+.pdf-mode{
+font-size:20px;
+}
+
+.pdf-mode h1{font-size:36px;}
+.pdf-mode h2{font-size:24px;}
+
+.pdf-mode input,.pdf-mode select{
+font-size:20px;
+padding:14px;
+}
+
+.pdf-mode .score-box{
+width:90px;
+height:45px;
+}
 </style>
 </head>
 
@@ -203,6 +224,7 @@ margin-bottom:5px;
 
 <div class="preguntas-grid">
 
+<!-- TODAS TUS PREGUNTAS ORIGINALES -->
 <div class="pregunta-item">
 <div class="pregunta-header">
 <span>Campeón</span><span class="score-box"></span>
@@ -293,16 +315,28 @@ margin-bottom:5px;
 <script>
 function generarPDF(e){
 e.preventDefault();
-html2canvas(document.getElementById("contenido"),{scale:3}).then(canvas=>{
-const {jsPDF}=window.jspdf;
-const pdf=new jsPDF("p","mm","a4");
-const w=pdf.internal.pageSize.getWidth();
-const h=pdf.internal.pageSize.getHeight();
-const imgH=h;
-const imgW=(canvas.width*imgH)/canvas.height;
-const x=(w-imgW)/2;
-pdf.addImage(canvas.toDataURL("image/png"),"PNG",x,0,imgW,imgH);
-pdf.save("quiniela.pdf");
+
+const contenido = document.getElementById("contenido");
+contenido.classList.add("pdf-mode");
+
+html2canvas(contenido,{
+  scale:1.5,
+  backgroundColor:"#ffffff"
+}).then(canvas=>{
+
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF("p","mm","a4");
+
+  const w=pdf.internal.pageSize.getWidth();
+  const imgData = canvas.toDataURL("image/jpeg",0.7);
+
+  const imgW = w;
+  const imgH = (canvas.height * imgW) / canvas.width;
+
+  pdf.addImage(imgData,"JPEG",0,0,imgW,imgH);
+  pdf.save("quiniela_ligera.pdf");
+
+  contenido.classList.remove("pdf-mode");
 });
 }
 
